@@ -30,9 +30,9 @@ class Homepage extends StatelessWidget{
         child: Icon(Icons.add),
       ),
 
-      drawer: NavigationDrawer(children: [
+      drawer: NavigationDrawer(children:[
         DrawerHeader(child: UserAccountsDrawerHeader(
-          decoration: BoxDecoration(color: Colors.blueGrey),
+          decoration: BoxDecoration(color: const Color.fromARGB(255, 43, 164, 225)),
           accountName: Text("name"), 
           accountEmail:Text ("Email"),
           ),
@@ -40,7 +40,6 @@ class Homepage extends StatelessWidget{
           ListTile(onTap:() {} , title: Text("HomePage")),
       ],
       
-      //ListTile(onTap: (){},title:Text("HomePage")),
       ),
 
       
