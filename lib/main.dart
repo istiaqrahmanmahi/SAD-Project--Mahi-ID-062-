@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demos/homePage.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 
 // jde ami ekta page dhore and  page er vitor ja ja thakbe ta ekta ekta widget bola hobe
@@ -21,7 +20,7 @@ class MyApp extends StatelessWidget{ //implimentation of ststelesswidget
   Widget build(BuildContext context) {
 
    return MaterialApp(
-     theme: ThemeData.dark(),
+     theme: ThemeData.light(),
      debugShowCheckedModeBanner:false,
 
       home: Homepage(),

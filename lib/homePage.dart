@@ -4,14 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class Homepage extends StatelessWidget{
+  const Homepage({super.key});
+
   @override
   Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 30, 155, 17),
-        foregroundColor: Colors.black,
+        foregroundColor: const Color.fromARGB(255, 66, 39, 125),
         title: Text("HomePage"),
-        //leading: Icon(Icons.home),
+        
         actions: [
           IconButton(
             onPressed: (){},
@@ -19,6 +21,9 @@ class Homepage extends StatelessWidget{
           IconButton(
             onPressed: (){}, 
             icon: Icon(Icons.favorite)),
+          IconButton(
+            onPressed: (){},
+            icon: Icon(Icons.post_add)),
         ],
       
       ),
@@ -31,18 +36,18 @@ class Homepage extends StatelessWidget{
       ),
 
       drawer: NavigationDrawer(children:[
-        DrawerHeader(child: UserAccountsDrawerHeader(
-          decoration: BoxDecoration(color: const Color.fromARGB(255, 43, 164, 225)),
-          accountName: Text("name"), 
-          accountEmail:Text ("Email"),
+        DrawerHeader(
+          child: UserAccountsDrawerHeader(
+            decoration: BoxDecoration(color: const Color.fromARGB(255, 43, 164, 225)),
+            accountName: Text("name : Mahi"),
+             
+            accountEmail:Text ("Email"),
           ),
-          ),
+        ),
           ListTile(onTap:() {} , title: Text("HomePage")),
       ],
       
-      ),
-
-      
+     ),
     );
   }
 }
