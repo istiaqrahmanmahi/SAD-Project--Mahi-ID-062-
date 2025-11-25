@@ -1,8 +1,5 @@
 
 
-
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SetImages extends StatelessWidget{
@@ -15,10 +12,11 @@ class SetImages extends StatelessWidget{
       body: Center(
         child: Column(
           children: [
-            Text("welcome to home page",style: TextStyle(fontSize: 20),),
+            Text("welcome to home page",style: TextStyle(fontSize: 20)),
             
             Image.asset(
               'assets/images/image.jpg',
+              
               height: 500,
               fit: BoxFit.fill,
             ),

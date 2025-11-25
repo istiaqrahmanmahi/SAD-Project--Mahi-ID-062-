@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demos/homePage.dart';
-
-
+import 'package:flutter_demos/assignment6.dart';
 // jde ami ekta page dhore and  page er vitor ja ja thakbe ta ekta ekta widget bola hobe
 //widget-> 2 type 1.ststefull ,2.ststelass
 //static->ststeless
@@ -23,7 +22,8 @@ class MyApp extends StatelessWidget{ //implimentation of ststelesswidget
      theme: ThemeData.light(),
      debugShowCheckedModeBanner:false,
 
-      home: Homepage(),
+     home: Homepage(),
+     //home:SetImages(),
    );
       
   }
