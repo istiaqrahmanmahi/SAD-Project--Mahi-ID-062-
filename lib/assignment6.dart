@@ -12,15 +12,20 @@ class SetImages extends StatelessWidget{
       body: Center(
         child: Column(
           children: [
-            Text("welcome to home page",style: TextStyle(fontSize: 20)),
+            Text("Welcome to Fishing Spot",style: TextStyle(fontSize: 50)),
             
-            Image.asset(
-              'assets/images/image.jpg',
-              
-              height: 500,
-              fit: BoxFit.fill,
+            Center(
+              child: Container(
+                child: Image.asset(
+                  'assets/images/image.jpg',
+                  
+                  height: 500,
+                  fit: BoxFit.fill,
+                ),
+              ),
             ),
-            Image.network('https://play-lh.googleusercontent.com/GJFhOYXbhYwmsCZN6exgGfPrgZiQ1zFbHLeHaylqG-7DLkzarVgrutLjQafp_UhUHIw'),
+            
+            //Image.network('https://play-lh.googleusercontent.com/GJFhOYXbhYwmsCZN6exgGfPrgZiQ1zFbHLeHaylqG-7DLkzarVgrutLjQafp_UhUHIw'), // This is the online picture.
           ],
         ),
       ),
