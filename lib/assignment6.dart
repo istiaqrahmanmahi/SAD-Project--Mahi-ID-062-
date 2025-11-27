@@ -15,13 +15,11 @@ class SetImages extends StatelessWidget{
             Text("Welcome to Fishing Spot",style: TextStyle(fontSize: 50)),
             
             Center(
-              child: Container(
-                child: Image.asset(
-                  'assets/images/image.jpg',
-                  
-                  height: 500,
-                  fit: BoxFit.fill,
-                ),
+              child: Image.asset(
+                'assets/images/image.jpg',
+                
+                height: 500,
+                fit: BoxFit.fill,
               ),
             ),
             

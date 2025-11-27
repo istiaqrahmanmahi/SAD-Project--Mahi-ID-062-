@@ -22,8 +22,8 @@ class MyApp extends StatelessWidget{ //implimentation of ststelesswidget
      theme: ThemeData.light(),
      debugShowCheckedModeBanner:false,
 
-     //home: Homepage(),
-     home:SetImages(),
+     home: Homepage(),
+     //home:SetImages(),
    );
       
   }

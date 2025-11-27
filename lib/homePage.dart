@@ -1,7 +1,7 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_demos/sliding_page.dart';
 
 class Homepage extends StatelessWidget{
   const Homepage({super.key});
@@ -46,6 +46,45 @@ class Homepage extends StatelessWidget{
         ),
           ListTile(onTap:() {} , title: Text("HomePage")),
       ],
+      
+     ),
+
+
+
+     body: Center(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+      
+        children: [
+     
+          ElevatedButton(onPressed: () {
+            Navigator.push(
+              context, 
+              MaterialPageRoute(
+                builder: (context)=> SlidingPage(),
+                ),
+              );
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color.fromARGB(255, 136, 143, 105),
+            foregroundColor: Colors.greenAccent,
+            shape: BeveledRectangleBorder(),
+          ),
+          child: Text("Eleveted")),
+     
+          OutlinedButton(
+            onPressed: (){}, 
+            child: Text("Outline")),
+     
+          TextButton(
+            onPressed: (){}, 
+            style: TextButton.styleFrom(
+            backgroundColor: const Color.fromARGB(255, 32, 195, 95),
+          ),
+          child:Text("Text")),
+        ],
+      ),
+      
       
      ),
     );
