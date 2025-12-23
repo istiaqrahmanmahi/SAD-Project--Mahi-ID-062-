@@ -2,6 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_demos/sliding_page.dart';
+import 'package:flutter_demos/list_Tile.dart';
+
+
 
 class Homepage extends StatelessWidget{
   const Homepage({super.key});
@@ -52,39 +55,84 @@ class Homepage extends StatelessWidget{
 
 
      body: Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-      
-        children: [
-     
-          ElevatedButton(onPressed: () {
-            Navigator.push(
-              context, 
-              MaterialPageRoute(
-                builder: (context)=> SlidingPage(),
+      child:SingleChildScrollView(
+       
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+
+            children: [
+              Text("Wlecome boy" ,style:TextStyle(fontSize: 20)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+              
+                children: [
+                   
+                  ElevatedButton( onPressed: () {
+              
+                    Navigator.push(
+                      context, 
+                      MaterialPageRoute(
+                        builder: (context)=> SlidingPage(),
+                        ),
+                      ); //one page to another page go (press the 'Eleveted' button to go Sliding page)
+              
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 136, 143, 105),
+                    foregroundColor: Colors.greenAccent,
+                    shape: BeveledRectangleBorder(),
+                  ),
+                  child: Text("Eleveted")),
+                   
+                  OutlinedButton(
+                    onPressed: (){}, 
+                    child: Text("Outline")),
+                   
+                  TextButton(
+                    onPressed: (){
+              
+                      Navigator.push(
+                      context, 
+                      MaterialPageRoute(
+                        builder: (context)=> list_Tile(),
+                        ),
+                      );// one page to another page go( press the 'Text' to go LISTs page)
+                    }, 
+                    style: TextButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 32, 195, 95),
+                  ),
+                    child:Text("Text"),
+                  ),
+               
+                ],
+              ),
+
+              SizedBox(
+                height: 300,
+                width: 300,
+                child: Card(
+                  color: Colors.amber,
+                  child: Center(child: Text("Card"),),
                 ),
-              );
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color.fromARGB(255, 136, 143, 105),
-            foregroundColor: Colors.greenAccent,
-            shape: BeveledRectangleBorder(),
+              ),
+
+                Container(
+                height: 300,
+                width: 300,
+                padding: EdgeInsets.all(20),
+                margin: EdgeInsets.all(20),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: Colors.blueGrey,
+                  border: Border.all(color: Colors.yellowAccent, width: 5),
+                  shape: BoxShape.circle,
+                ),
+
+                child: Text("Container"),//in the container write/ do anything
+              ),
+            ],
           ),
-          child: Text("Eleveted")),
-     
-          OutlinedButton(
-            onPressed: (){}, 
-            child: Text("Outline")),
-     
-          TextButton(
-            onPressed: (){}, 
-            style: TextButton.styleFrom(
-            backgroundColor: const Color.fromARGB(255, 32, 195, 95),
-          ),
-          child:Text("Text")),
-        ],
-      ),
-      
+        ),
       
      ),
     );
