@@ -3,7 +3,11 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:flutter_demos/login.dart';
+
+import 'package:flutter_demos/auth_gate.dart';
 import 'package:flutter_demos/widgets/input_field.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MyRegister extends StatefulWidget {
   const MyRegister({Key? key}) : super(key: key);
@@ -13,15 +17,65 @@ class MyRegister extends StatefulWidget {
 }
 
 class _MyRegisterState extends State<MyRegister> {
-   TextEditingController nameController = TextEditingController();
-   TextEditingController emailController = TextEditingController();
-   TextEditingController phoneController = TextEditingController();
-   TextEditingController passwardController = TextEditingController();
+   final TextEditingController _nameController = TextEditingController();
+   final TextEditingController _emailController = TextEditingController();
+   final TextEditingController _phoneController = TextEditingController();
+   final TextEditingController _PasswordController = TextEditingController();
+   final TextEditingController _cpasswordController = TextEditingController();
 
+   bool _isLoading =false;
+   final _supabase=Supabase.instance.client;
 
   final _formKey=GlobalKey<FormState>();
 
-  String name ="";
+  void register() async {
+    String name = _nameController.text.trim();
+    String email = _emailController.text.trim();
+    String password = _PasswordController.text.trim();
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+     // print("try");
+      final authResponse = await _supabase.auth.signUp(
+        email: email,
+        password: password,
+      );
+     // print("Auth: ${authResponse.user}");
+      final user = authResponse.user;
+      if (user != null) {
+        // Save extra user info in profiles table
+       // print("User: $user");
+        await _supabase.from('profiles').insert({
+          'id': user.id, // Link to auth.users
+          'name': name,
+          'email': email,
+        });
+      }
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Registered Successfully!!")));
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MyLogin()),
+      );
+    } on AuthApiException catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.message)));
+    }
+    _nameController.clear();
+    _emailController.clear();
+    _PasswordController.clear();
+    _cpasswordController.clear();
+    setState(() {
+      _isLoading = false;
+    });
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -54,19 +108,21 @@ class _MyRegisterState extends State<MyRegister> {
                     Container(
                       margin: EdgeInsets.only(left: 35, right: 35),
                       child:Form(
+                        key: _formKey,
+
                         child: Column(
                           children: [
                         
                             InputField(
                           
-                                controller:nameController, 
+                                controller:_nameController, 
                                 keyboardType:TextInputType.text, 
                                 label:"Name", 
                                 hint: "Enter Name", 
                                 icon: Icons.person,
                           
                                 validator: (value) {
-                                  if (value.isEmpty) {
+                                  if (value==null||value.isEmpty) {
                                   return "Field is empty!!";
                                   } else if (!RegExp(r"^[A-Za-z .]{3,}$").hasMatch(value)) {
                                   return "Invalid Format!!";
@@ -81,14 +137,14 @@ class _MyRegisterState extends State<MyRegister> {
                         
                               InputField(
                           
-                                controller: phoneController,
+                                controller: _phoneController,
                                 keyboardType: TextInputType.number,
                                 label: "Phone",
                                 hint: "Enter Phone",
                                 icon: Icons.phone,
                           
                                 validator: (value) {
-                                  if (value.isEmpty) {
+                                  if (value==null|| value.isEmpty) {
                                   return "Field is empty!!";
                                   }
                                   return null;
@@ -102,14 +158,14 @@ class _MyRegisterState extends State<MyRegister> {
                         
                              InputField(
                           
-                                controller: emailController,
+                                controller: _emailController,
                                 keyboardType: TextInputType.visiblePassword,
                                 label: "Email",
                                 hint: "Enter Email",
                                 icon: Icons.email,
                           
                                 validator: (value) {
-                                  if (value.isEmpty) {
+                                  if (value==null|| value.isEmpty) {
                                   return "Field is empty!!";
                                   }
                                   return null;
@@ -119,24 +175,62 @@ class _MyRegisterState extends State<MyRegister> {
                               SizedBox(
                               height: 30,
                             ),
+                              
                               InputField(
-                          
-                                controller: passwardController,
-                                keyboardType: TextInputType.visiblePassword,
-                                label: "passward",
-                                hint: "Enter passward",
-                                icon: Icons.lock,
-                          
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                  return "Field is empty!!";
-                                  }
-                                  return null;
-                                  },
-                              ),
+                      controller: _PasswordController,
+                      keyboardType: TextInputType.visiblePassword,
+                      label: "Password",
+                      hint: "Enter Password",
+                      icon: Icons.lock,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Enter password";
+                        }
+                        if (value.length < 8) {
+                          return "Length must be more then 8";
+                        }
+                        if (!RegExp(
+                          r'^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{8,}$',
+                        ).hasMatch(value)) {
+                          return "Enter a strong password!!";
+                        }
+                        if (_PasswordController.text !=
+                            _cpasswordController.text) {
+                          return "password and confirm password does't match";
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 10),
+
+                    InputField(
+                      controller: _cpasswordController,
+                      keyboardType: TextInputType.visiblePassword,
+                      label: "Confirm Password",
+                      hint: "Enter Confirm Password",
+                      icon: Icons.lock,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Enter confirm password";
+                        }
+                        if (value.length < 8) {
+                          return "Length must be more then 8";
+                        }
+                        if (!RegExp(
+                          r'^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{8,}$',
+                        ).hasMatch(value)) {
+                          return "Enter a strong password!!";
+                        }
+                        if (_PasswordController.text !=
+                            _cpasswordController.text) {
+                          return "password and confirm password does't match";
+                        }
+                        return null;
+                      },
+                    ),
                         
                         
-                            
+                            /*
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -159,6 +253,7 @@ class _MyRegisterState extends State<MyRegister> {
                                 )
                               ],
                             ),
+                            */
                             SizedBox(
                               height: 40,
                             ),
@@ -167,10 +262,19 @@ class _MyRegisterState extends State<MyRegister> {
                               children: [
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.pushNamed(context, 'login');
+                                    Navigator.pushReplacement(
+                                       context,
+                                       MaterialPageRoute(builder: (_) => const MyLogin()),
+                                    );
+                                    if(_formKey.currentState!.validate()){
+                                      register();
+                                    }
                                   },
-                                  child: Text(
-                                    'Sign In',
+                                  child:
+                                     _isLoading
+                                        ?CircularProgressIndicator() 
+                                        : Text(
+                                               'Register',
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
                                         decoration: TextDecoration.underline,
@@ -195,4 +299,6 @@ class _MyRegisterState extends State<MyRegister> {
     );
   }
 }
+
+
 

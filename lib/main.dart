@@ -10,6 +10,7 @@ import 'package:flutter_demos/list_view.dart';
 import 'package:flutter_demos/login.dart';
 import 'package:flutter_demos/profilepage.dart';
 import 'package:flutter_demos/registration.dart';
+import 'package:flutter_demos/auth_gate.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 //import 'package:flutter_demos/register.dart';
 
@@ -53,12 +54,16 @@ class MyApp extends StatelessWidget{ //implimentation of ststelesswidget
      //home:SetImages(),
      //home:list_Tile() ,
      //home:profile_Page(),
-     home:MyLogin(),
+     home:AuthGate(),
     //home: ListviewPage(),
     //home: GridviewPage(),
+     //initialRoute: 'Login',
      routes: {
-      'register':(context) =>MyRegister(),
-      'Login':(context) =>MyLogin(),
+    
+      'register':(context) =>const MyRegister(),
+      'Login':(context) =>const MyLogin(),
+      'home': (context) => const HomePage(),
+
      },
 
    );

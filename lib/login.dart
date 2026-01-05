@@ -2,22 +2,55 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:flutter_demos/registration.dart';
+
 import 'package:flutter_demos/widgets/input_field.dart';
+import 'package:flutter_demos/homePage.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MyLogin extends StatefulWidget {
   const MyLogin({Key? key}) : super(key: key);
 
   @override
-  _MyLoginState createState() => _MyLoginState();
+  State<MyLogin> createState() => _MyLoginState();
 }
 
 class _MyLoginState extends State<MyLogin> {
 
-  TextEditingController nameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  final _formKey=GlobalKey<FormState>();
+ final TextEditingController _PasswordController = TextEditingController();
+ final TextEditingController _emailController = TextEditingController();
+ final _formKey=GlobalKey<FormState>();
+ bool _isLoading=false;
+ final _supabase=Supabase.instance.client;
 
-  String name ="";
+  void login() async {
+    String email = _emailController.text.trim();
+    String password = _PasswordController.text.trim();
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      await _supabase.auth.signInWithPassword(
+        email: email, 
+        password:password
+        );
+      Navigator.pushReplacementNamed(context, 'home');
+
+      _emailController.clear();
+      _PasswordController.clear();
+    } on AuthApiException catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.message)));
+    }
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -52,32 +85,12 @@ class _MyLoginState extends State<MyLogin> {
                         key: _formKey,
                         child: Column(
                           children: [
-                        
+
+
                             InputField(
                         
-                              controller:nameController, 
-                              keyboardType:TextInputType.text, 
-                              label:"Name", 
-                              hint: "Enter Name", 
-                              icon: Icons.person,
-                        
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                return "Field is empty!!";
-                                } else if (!RegExp(r"^[A-Za-z .]{3,}$").hasMatch(value)) {
-                                return "Invalid Format!!";
-                                }
-                                return null;
-                                          }, 
-                             
-                            ),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            InputField(
-                        
-                              controller: emailController,
-                              keyboardType: TextInputType.visiblePassword,
+                              controller: _emailController,
+                              keyboardType: TextInputType.emailAddress,
                               label: "Email",
                               hint: "Enter Email",
                               icon: Icons.email,
@@ -90,6 +103,27 @@ class _MyLoginState extends State<MyLogin> {
                                 },
                             
                             ),
+                        
+                            InputField(
+                        
+                              controller:_PasswordController, 
+                              keyboardType:TextInputType.visiblePassword, 
+                              label:"Passward", 
+                              hint: "Enter password", 
+                              icon: Icons.lock,
+                        
+                              validator: (value) {
+                                if (value==null||value.isEmpty) {
+                                return "Field is empty!!";
+                                } 
+                                return null;
+                                          }, 
+                             
+                            ),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            
                             SizedBox(
                               height: 40,
                             ),
@@ -98,10 +132,15 @@ class _MyLoginState extends State<MyLogin> {
                               children: [
                                 ElevatedButton(
                                    onPressed: (){
-                                   name ="Name is :${nameController.text}";
-                                   setState((){});
+                                   if (_formKey.currentState!.validate()) {
+                                   login();
+                                  }
                                   }, 
-                                  child:Text('Login'),
+                                  child:
+                                  _isLoading
+                                      ?CircularProgressIndicator()
+
+                                      :Text('Login'),
                                 ),
                                 CircleAvatar(
                                   radius: 30,
@@ -122,18 +161,16 @@ class _MyLoginState extends State<MyLogin> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pushNamed(context, 'register');
-                                  },
-                                  child: Text(
-                                    'Sign Up',
-                                     textAlign: TextAlign.left,
-                                     style: TextStyle(
-                                        decoration: TextDecoration.underline,
-                                        color: Color.fromARGB(255, 17, 201, 60),
-                                        fontSize: 18),
-                                  ),
+                               
+                                GestureDetector(
+                                  onTap:
+                                      () => Navigator.push(
+                                       context,
+                                       MaterialPageRoute(
+                                         builder: (context) => MyRegister(),
+                                       ),
+                                    ),
+                                  child: Text("Don't have an account? Register"),
                                 ),
                                 TextButton(
                                     onPressed: () {},
